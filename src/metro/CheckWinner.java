@@ -10,11 +10,22 @@ public class CheckWinner
     private static final CheckWinner INSTANCE = new CheckWinner();
   }
 
+  /**
+   * @return
+   */
   public static CheckWinner getInstance()
   {
     return SingletonHelper.INSTANCE;
   }
 
+  /**
+   * Checks winning condition. This is a very dirty way to check winning conditions. Can be prove but I dont't have any time to do that now :(
+   * Works from 3 to 6 Grid size and only for two human player. 
+   * 
+   * @param boardPositions
+   * @param numerOfRowAndColumn
+   * @return
+   */
   public String checkWinner( ArrayList<Object> boardPositions, int numerOfRowAndColumn )
   {
     if( numerOfRowAndColumn == 3 )
@@ -40,6 +51,12 @@ public class CheckWinner
     return null;
   }
 
+  /**
+   * Checks for 3*3 Matrix.
+   * @param boardPositions
+   * @param numerOfRowAndColumn
+   * @return
+   */
   private String checkWinnerForRowAndColumn3( ArrayList<Object> boardPositions, int numerOfRowAndColumn )
   {
 
@@ -97,6 +114,12 @@ public class CheckWinner
     return null;
   }
 
+  /**
+   * Checks for 4*4 Matrix.
+   * @param boardPositions
+   * @param numerOfRowAndColumn
+   * @return
+   */
   private String checkWinnerForRowAndColumn4( ArrayList<Object> boardPositions, int numerOfRowAndColumn )
   {
 
@@ -162,6 +185,12 @@ public class CheckWinner
     return null;
   }
 
+  /**
+   * Checks for 5*5 Matrix.
+   * @param boardPositions
+   * @param numerOfRowAndColumn
+   * @return
+   */
   private String checkWinnerForRowAndColumn5( ArrayList<Object> boardPositions, int numerOfRowAndColumn )
   {
     for( int a = 0; a < checkPossibleWinningLines( numerOfRowAndColumn ); a++ )
@@ -240,6 +269,12 @@ public class CheckWinner
     return null;
   }
 
+  /**
+   * Checks for 6*6 Matrix.
+   * @param boardPositions
+   * @param numerOfRowAndColumn
+   * @return
+   */
   private String checkWinnerForRowAndColumn6( ArrayList<Object> boardPositions, int numerOfRowAndColumn )
   {
     for( int a = 0; a < checkPossibleWinningLines( numerOfRowAndColumn ); a++ )
@@ -333,6 +368,11 @@ public class CheckWinner
     return null;
   }
 
+  /**
+   * Checks how many line could be possible to win in a Matrix.
+   * @param numerOfRowAndColumn
+   * @return
+   */
   private Integer checkPossibleWinningLines( int numerOfRowAndColumn )
   {
     return ( numerOfRowAndColumn * 2 ) + 2;

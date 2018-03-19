@@ -28,7 +28,13 @@ public class TicTacToe
   static int playerPosition;
 
   private static ArrayList<Object> boardPositions = new ArrayList<Object>();
+  private static List<Integer> turn = new ArrayList<>();
 
+
+  /**
+   * Creats a Playfiled by reading size from tictactoe.properites file
+   * @return {@link Integer}
+   */
   public static Integer creatPlayField()
   {
     final ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -46,6 +52,12 @@ public class TicTacToe
     return Integer.valueOf( prop.getProperty( SIZE_OF_BOARD ) );
   }
 
+  /**
+   * Prints Tic Tac Toe board. Board size is restricted between 3 to 10.
+   * 
+   * @param boardPositions
+   * @param numerOfRowOrColumn
+   */
   private static void printBoard( final ArrayList<Object> boardPositions, final int numerOfRowOrColumn )
   {
     if( isBetween( numerOfRowOrColumn, 3, 10 ) )
@@ -71,6 +83,13 @@ public class TicTacToe
     }
   }
 
+  /**
+   * Check if the size is between 3 to 10.
+   * @param value
+   * @param min
+   * @param max
+   * @return
+   */
   public static boolean isBetween( final int value, final int min, final int max )
   {
     return ( ( value >= min ) && ( value <= max ) );
@@ -81,6 +100,9 @@ public class TicTacToe
     startPlay();
   }
 
+  /**
+   * Play start from here.
+   */
   private static void startPlay()
   {
     // Takes Input
@@ -109,11 +131,12 @@ public class TicTacToe
           player2 = true;
           if( StringUtils.equals( checkDrawCondition(), "continue" ) )
           {
-            continue;
+            // empty
           }
-          else
+          else if (StringUtils.equals( checkDrawCondition(), "draw" ) )
           {
             winner = "draw";
+            break;
           }
           winner = CheckWinner.getInstance().checkWinner( boardPositions, numerOfRowAndColumn );
         }
@@ -132,6 +155,15 @@ public class TicTacToe
           notOccupied = true;
           player2 = false;
           player1 = true;
+          if( StringUtils.equals( checkDrawCondition(), "continue" ) )
+          {
+            // empty
+          }
+          else if (StringUtils.equals( checkDrawCondition(), "draw" ) )
+          {
+            winner = "draw";
+            break;
+          }
           winner = CheckWinner.getInstance().checkWinner( boardPositions, numerOfRowAndColumn );
         }
       }
@@ -141,21 +173,25 @@ public class TicTacToe
         continue;
       }
     }
+    // Checks who is the winner
     if( StringUtils.isNotBlank( winner ) )
     {
-      if( !player1 )
+      if( turn.get( 0 )==1 )
         System.out.println( "Player 'X' Won the match." );
-      else if( !player2 )
+      else if( turn.get( 0 )==2 )
         System.out.println( "Player 'O' Won the match." );
       else if( StringUtils.equals( winner, "draw" ) )
         System.out.println( "Matched has been drawn." );
     }
   }
 
+  /**
+   * Selects player if player 1 or two will start the game
+   * @return
+   */
   private static List<Integer> selectPlayer()
   {
     int playerTurn = 0;
-    List<Integer> turn = new ArrayList<>();
     System.out.println( "Press 1 if you are player X or 2 if you are player O" );
 
     playerTurn = in.nextInt();
@@ -179,6 +215,12 @@ public class TicTacToe
     }
   }
 
+  /**
+   * Check and replaces the position given by user. It also proves if the position has been occupied by other user.
+   * @param boardPositions
+   * @param playerPositions
+   * @param playerTurn
+   */
   private static void checkAndReplacePositions( ArrayList<Object> boardPositions, int playerPositions, char playerTurn )
   {
     LOGGER.debug( "Boardpositions " + boardPositions.size() );
@@ -207,6 +249,11 @@ public class TicTacToe
     }
   }
 
+  /**
+   * Puts the position of board depending on size which is mentioned in tictactoe.properties data.
+   * @param numerOfRowAndColumn
+   * @return
+   */
   private static int populateEmptyBoard( final int numerOfRowAndColumn )
   {
     final int values = numerOfRowAndColumn * numerOfRowAndColumn;
@@ -217,16 +264,26 @@ public class TicTacToe
     return values;
   }
 
-  private static String checkDrawCondition()
+  /**
+   * Here checks if the game has been drawn.
+   * @return
+   */
+  public static String checkDrawCondition()
   {
-    for( int a = 0; a < boardPositions.size() + 1; a++ )
+    Iterator<Object> iter = boardPositions.iterator();
+    ArrayList<Object> charecterList = new  ArrayList<Object>();
+
+    while( iter.hasNext() )
     {
-      if( Arrays.asList( boardPositions ).contains( String.valueOf( a + 1 ) ) )
+      Object next = iter.next();
+      if(next instanceof Character)
       {
-        break;
+        charecterList.add( next );
+        if(charecterList.size() == boardPositions.size()-1)
+        {
+          return "draw";
+        }
       }
-      else if( a == boardPositions.size() - 1 )
-        return "draw";
     }
     return "continue";
   }

@@ -6,15 +6,6 @@
 **/target/
 **/groovy-classes/
 
-# intellij project files
-.idea
-*.iml
-
-# eclipse project files (for the future use, because .gitignore doesn't apply to tracked files)
-**/.project
-**/.settings/
-**/.classpath
-
 # logs
 **/*.log
 **/*.out
